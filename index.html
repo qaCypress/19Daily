@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tournament & Lottery Window</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        width: 300px;
+        margin: 50px auto;
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 50px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        position: relative; /* Добавлено для позиционирования кнопки Back */
+    }
+    h2 {
+        color: #333333;
+    }
+    .dropdown-container {
+        margin-bottom: 20px;
+    }
+    .input-container {
+        margin-bottom: 10px;
+    }
+    .spacing {
+        margin-bottom: 30px; /* Отступ между элементами */
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #000000;
+    }
+
+.label1,
+.label2,
+.label3 {
+    display: block;
+    margin-bottom: 1px;
+    margin-top: 1px;
+    color: #ffffff;
+}
+
+.dynamic-input {
+    width: calc(100% - 12px);
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 1px;
+}
+
+    input[type="text"] {
+        width: calc(100% - 12px);
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    button {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 3px;
+        background-color: #007bff;
+        color: #ffffff;
+        cursor: pointer;
+    }
+    button.back {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .input {
+      margin-bottom: 0px; /* Отступ между полями ввода и кнопкой */
+  }
+  .input1 {
+    margin-bottom: 3px; /* Отступ между полями ввода и кнопкой */
+}
+.input2 {
+    margin-bottom: 3px; /* Отступ между полями ввода и кнопкой */
+}
+  
+  .start {
+      margin-top: 10px; /* Отступ между кнопкой и другими элементами */
+  }
+
+  #optionsCuracao {
+    display: none;
+}
+
+#buttonStart {
+  position: absolute;
+  bottom: 10px; /* Небольшой отступ от нижнего края (можете изменить значение по вашему усмотрению) */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#myModal {
+    display: none;
+    position: fixed;
+    top: 10px; /* Добавляем небольшой отступ сверху */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px;
+    background-color: #007bff;
+    border: 1px solid #ffffff;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    font-size: 12px;
+}
+
+#myModalSuccses {
+    display: none;
+    position: fixed;
+    top: 10px; /* Добавляем небольшой отступ сверху */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px;
+    background-color: #2bff00;
+    border: 1px solid #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-size: 12px;
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Select an Option</h2>
+
+    <div id="myModal">
+        <p>Оберіть налаштування</p>
+      </div>
+
+      <div id="myModalSuccses">
+        <p>Перевірка закінчена</p>
+      </div>
+
+    <div class="dropdown-container">
+        <select id="options">
+            <option value="none">Select</option>
+            <option value="lottery">Lottery</option>
+            <option value="tournament">Tournament</option>
+        </select>
+    </div>
+    <div id="lottery-form" style="display: none;">
+        <button id="back-button-lottery" class="back" onclick="resetForm()">Clear &#10006;</button>
+        <div id="lottery-options" style="display: none;">
+            <label for="lottery-type">Lottery Type:</label>
+            <select id="lottery-type">
+                <option value="Select">Select</option>
+                <option value="1lvl">1lvl</option>
+                <option value="MultiLevel">MultiLevel</option>
+            </select>
+            <p>
+
+            </p>
+        </div>
+    </div>
+    <div id="tournament-form" style="display: none;">
+    <div class="input-container">
+        <label for="amount"></label> <!-- Удаляем текст метки -->
+        <input type="text" id="amount" placeholder="Currencies"> <!-- Добавляем placeholder -->
+    </div>
+    <div class="input-container">
+        <label for="price-pool"></label> <!-- Удаляем текст метки -->
+        <input type="text" id="price-pool" placeholder="Price Pool"> <!-- Добавляем placeholder -->
+    </div>
+    <div class="spacing"></div> <!-- Отступ между полями и кнопкой -->
+    <button id="back-button-tournament" class="back" onclick="resetForm()">Clear &#10006;</button>
+    <div class="spacing"></div> <!-- Отступ между кнопкой "Back" и кнопкой "Start" -->
+</div>
+
+    <div class="dropdown-containerCuracao">
+      <select id="optionsCuracao">
+          <option value="Select">Select</option>
+          <option value="SpinBounty/Magic">SpinBounty/Magic</option>
+          <option value="AllRight">AllRight</option>
+          <option value="LuckyBird">LuckyBird</option>
+      </select>
+      <div class="spacing"></div> <!-- Отступ между полями и кнопкой -->
+</div>
+<div>
+  <button id="buttonStart">Start</button> 
+</div>
+<script type="module" src="content.js"></script>
+
+</body>
+</html>

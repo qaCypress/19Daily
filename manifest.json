@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "NineteenDaily",
+  "version": "1.1",
+  "description": "",
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "storage",
+    "scripting",
+    "webNavigation"
+],
+"host_permissions": [
+  "https://cms2.sofcms.co/*"
+],
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "nineteen.png",
+      "48": "nineteen.png",
+      "128": "nineteen.png"
+    }
+  },
+  "icons": {
+    "16": "nineteen.png",
+    "48": "nineteen.png",
+    "128": "nineteen.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["content.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
