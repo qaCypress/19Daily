@@ -1,5 +1,6 @@
 import { removeInputFieldsPrize, removeAllInputFields, createInputFields, createInputFieldsPrize, createInputFieldsPrizeSpinBounty } from './scripts/function.js';
 
+
 document.addEventListener('DOMContentLoaded', function () {
     var buttonStart = document.getElementById('buttonStart');
     var options = document.getElementById('options');
@@ -1030,20 +1031,6 @@ inputElement.style.backgroundColor = 'lime'; // Если inputValue найден
 });
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     else if (selectedOption === 'tournament') {
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -1100,6 +1087,129 @@ if (arraysAreEqual) {
 } else {
     ticketPriceInput.style.background = 'red'; // Сброс цвета
 }
+        });
+
+
+
+
+
+
+
+
+
+        chrome.scripting.executeScript({
+            target: { tabId: tabs[0].id },
+            function: function() {
+
+                const prizePoolElements = document.querySelectorAll('[id*="prizePool"], [name*="prizePool"]');
+                const prizePoolValues = Array.from(prizePoolElements).map(element => element.value);
+                const prizePoolValuesSliced = prizePoolValues.slice(1);
+                
+                const currenciesPoolElements = document.querySelectorAll('[id*="currency"], [name*="currency"]');
+                const currenciesPool = Array.from(currenciesPoolElements).map(element => element.value);
+
+                const result = [];
+            
+                const minLength = Math.min(prizePoolValues.length, currenciesPool.length);
+
+                for (let i = 0; i < minLength; i++) {
+                    result.push(`${prizePoolValuesSliced[i]} ${currenciesPool[i]}`); // Объединение значение с валютой
+                }
+
+                return result;
+            }
+        }, function(result) {
+            
+const pricePoolCms = result[0].result
+
+const PricePool = document.querySelector('input[placeholder="Price Pool"]');
+
+const sdfsdf = PricePool.value
+
+const dfgdf = sdfsdf.replace(/{%/g, "{") // Замена "{%" на "{"
+.replace(/%}/g, "}");
+
+
+const pricePoolObject = JSON.parse(dfgdf);
+
+// Массив для хранения результатов
+const formattedArray = [];
+
+// Проходим по каждому ключу в объекте
+for (const [currency, valueString] of Object.entries(pricePoolObject)) {
+    // Извлекаем числовые символы
+    const numberString = valueString.replace(/[^0-9.]/g, ''); // Оставляем только цифры и точки
+    const numericValue = parseFloat(numberString).toFixed(8); // Преобразуем в число и форматируем до 8 знаков после запятой
+    formattedArray.push(`${numericValue} ${currency}`); // Форматируем с указанием валюты
+}
+
+const sortArray = (array) => {
+    return array.sort((a, b) => {
+        const numA = parseFloat(a.split(' ')[0]); // Числовая часть
+        const numB = parseFloat(b.split(' ')[0]); // Числовая часть
+        const currA = a.split(' ')[1]; // Валюта
+        const currB = b.split(' ')[1]; // Валюта
+        
+        // Сначала сортируем по числовой части
+        if (numA < numB) return -1;
+        if (numA > numB) return 1;
+
+        // Если числа одинаковы, сортируем по валюте
+        if (currA < currB) return -1;
+        if (currA > currB) return 1;
+
+        return 0; // Если все одинаково
+    });
+};
+
+const sortarrCMS = (pricePoolCms);
+const sortarrExt = (formattedArray);
+
+const jsonObjectCMS = {};
+const jsonObjectExt = {};
+
+sortarrExt.forEach((item) => {
+    // Разделяем на числовую часть и валюту
+    const [numericPart, currency] = item.split(' ');
+    
+    // Добавляем в объект, где валюта — ключ, а числовое значение — значение
+    jsonObjectCMS[currency] = numericPart; // Убедитесь, что ключи уникальны
+});
+
+
+const jsonStringCMS = JSON.stringify(jsonObjectCMS, null, 4); // null и 4 для красивого форматирования
+
+console.log("JSON объект CMS:", jsonStringCMS); // Выводим объект JSON
+
+
+
+sortarrExt.forEach((item) => {
+    // Разделяем на числовую часть и валюту
+    const [numericPart, currency] = item.split(' ');
+    
+    // Добавляем в объект, где валюта — ключ, а числовое значение — значение
+    jsonObjectExt[currency] = numericPart; // Убедитесь, что ключи уникальны
+});
+
+
+const jsonStringExt = JSON.stringify(jsonObjectExt, null, 4); // null и 4 для красивого форматирования
+
+console.log("JSON объект Ext:", jsonStringExt); // Выводим объект JSON
+
+
+const areObjectsEqual = jsonStringCMS === jsonStringExt;
+
+console.log("Объекты идентичны?", areObjectsEqual); // true, если они одинаковы
+
+
+const inini = document.querySelector('input[placeholder="Price Pool"]');
+
+if (areObjectsEqual) {
+    inini.style.backgroundColor = 'lime';
+} else {
+    inini.style.backgroundColor = 'red';
+}
+
         });
 
         chrome.scripting.executeScript({
